@@ -29,7 +29,8 @@ def create_oauth_header(
         oauth_consumer_secret,
         oauth_token,
         oauth_token_secret,
-        verbose=False):
+        verbose=False,
+        **additional_parameters):
 
     method = "POST"
     oauth_nonce = generate_nonce()
@@ -48,6 +49,7 @@ def create_oauth_header(
 
     # Create a sorted parameters
     all_parameters = oauth_parameters.copy()
+    all_parameters.update(additional_parameters)
     sorted_parameters = "&".join(f"{encode_text(k)}={encode_text(v)}" for k, v in sorted(all_parameters.items()))
 
     # ベースストリングの作成
@@ -67,7 +69,7 @@ def create_oauth_header(
         print(f"Signature: {signature}")
 
     # Authorization ヘッダーの作成
-    oauth_parameters["oauth_signature"] = signature
-    auth_header = "OAuth " + ", ".join([f'{encode_text(k)}="{encode_text(v)}"' for k, v in oauth_parameters.items()])
+    all_parameters["oauth_signature"] = signature
+    auth_header = "OAuth " + ", ".join([f'{encode_text(k)}="{encode_text(v)}"' for k, v in all_parameters.items()])
 
     return auth_header
