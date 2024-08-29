@@ -4,8 +4,8 @@ import hashlib
 import base64
 import requests
 
-import http.client as http_client
-http_client.HTTPConnection.debuglevel = 1
+# import http.client as http_client
+# http_client.HTTPConnection.debuglevel = 1
 
 from utility import generate_nonce, get_timestamp, encode_text
 
