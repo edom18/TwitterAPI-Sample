@@ -4,17 +4,17 @@ import hashlib
 import base64
 import requests
 
-import http.client as http_client
-http_client.HTTPConnection.debuglevel = 1
+# import http.client as http_client
+# http_client.HTTPConnection.debuglevel = 1
 
 from utility import generate_nonce, get_timestamp, encode_text
 
 import dotenv
 dotenv.load_dotenv()
 
+def post(files):
 
-def request(endpoint_url, parameters):
-
+    media_upload_endpoint_url = "https://upload.twitter.com/1.1/media/upload.json"
     oauth_consumer_key = os.environ.get("CONSUMER_KEY")
     oauth_consumer_secret = os.environ.get("CONSUMER_SECRET")
     oauth_nonce = generate_nonce()
@@ -42,7 +42,7 @@ def request(endpoint_url, parameters):
     print(f"Sorted Parameters: {sorted_parameters}\n")
 
     # ベースストリングの作成
-    base_string = f"{method}&{encode_text(endpoint_url)}&{encode_text(sorted_parameters)}"
+    base_string = f"{method}&{encode_text(media_upload_endpoint_url)}&{encode_text(sorted_parameters)}"
 
     print(f"Base String: {base_string}\n")
 
@@ -62,31 +62,10 @@ def request(endpoint_url, parameters):
 
     # リクエストヘッダーのセット
     headers = {
-        "Content-Type": "application/json",
         "Authorization": auth_header,
     }
 
-    print(f"Access the api [{endpoint_url}] ...")
+    print(f"Access the api [{media_upload_endpoint_url}] ...")
 
-    response = requests.post(endpoint_url, headers=headers, json=parameters)
+    response = requests.post(media_upload_endpoint_url, headers=headers, files=files)
     return response
-
-# --------------------------------
-
-endpoint_url = "https://api.twitter.com/2/tweets"
-
-parameters = {
-    "text": "Hello Twitter API v2! with an image!",
-    "media": {
-        "media_ids": ["1829109459614097408"],
-    },
-}
-
-response = request(endpoint_url, parameters)
-
-# レスポンスの確認
-if response.status_code == 201:
-    print("Tweet posted successfully!")
-else:
-    print(f"Failed to post tweet. Status code: {response.status_code}")
-    print(response.json())

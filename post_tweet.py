@@ -4,15 +4,18 @@ import hashlib
 import base64
 import requests
 
-# import http.client as http_client
-# http_client.HTTPConnection.debuglevel = 1
+import http.client as http_client
+http_client.HTTPConnection.debuglevel = 1
 
 from utility import generate_nonce, get_timestamp, encode_text
 
 import dotenv
 dotenv.load_dotenv()
 
-def request(endpoint_url, files):
+
+def request(parameters):
+
+    endpoint_url = "https://api.twitter.com/2/tweets"
 
     oauth_consumer_key = os.environ.get("CONSUMER_KEY")
     oauth_consumer_secret = os.environ.get("CONSUMER_SECRET")
@@ -61,30 +64,11 @@ def request(endpoint_url, files):
 
     # リクエストヘッダーのセット
     headers = {
+        "Content-Type": "application/json",
         "Authorization": auth_header,
     }
 
     print(f"Access the api [{endpoint_url}] ...")
 
-    response = requests.post(endpoint_url, headers=headers, files=files)
+    response = requests.post(endpoint_url, headers=headers, json=parameters)
     return response
-
-# --------------------------------
-
-media_upload_endpoint_url = "https://upload.twitter.com/1.1/media/upload.json"
-
-# file_name = "logo.jpg"
-file_name = "sample.jpg"
-file = open(f"./{file_name}", "rb")
-files = {
-    "media": file,
-}
-
-response = request(media_upload_endpoint_url, files)
-
-# レスポンスの確認
-if response.status_code == 201:
-    print("Tweet posted successfully!")
-else:
-    print(f"Failed to post tweet. Status code: {response.status_code}")
-    print(response.json())
