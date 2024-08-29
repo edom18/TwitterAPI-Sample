@@ -1,7 +1,6 @@
 import os
 import requests
 
-# from requests_oauthlib import OAuth1Session
 from utility import create_oauth_header
 
 import dotenv
