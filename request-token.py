@@ -1,34 +1,84 @@
 import os
+import requests
 
-from requests_oauthlib import OAuth1Session
+# from requests_oauthlib import OAuth1Session
+from utility import create_oauth_header
 
 import dotenv
 dotenv.load_dotenv()
 
-API_KEY = os.environ.get("CONSUMER_KEY")
-API_KEY_SECRET = os.environ.get("CONSUMER_SECRET")
+# API_KEY = os.environ.get("CONSUMER_KEY")
+# API_KEY_SECRET = os.environ.get("CONSUMER_SECRET")
+
+oauth_consumer_key = os.environ.get("CONSUMER_KEY")
+oauth_consumer_secret = os.environ.get("CONSUMER_SECRET")
+oauth_token = os.environ.get("AUTH_TOKEN")
+oauth_token_secret = os.environ.get("AUTH_TOKEN_SECRET")
 
 callback_url = "https://hippogames.dev/api/oauth/redirect"
 request_endpoint_url = "https://api.twitter.com/oauth/request_token"
 authenticate_url = "https://api.twitter.com/oauth/authenticate"
 
-session_req = OAuth1Session(API_KEY, API_KEY_SECRET)
-response_req = session_req.post(request_endpoint_url, params={"oauth_callback": callback_url})
+# session_req = OAuth1Session(API_KEY, API_KEY_SECRET)
+# response_req = session_req.post(request_endpoint_url, params={"oauth_callback": callback_url})
+# response_req_text = response_req.text
+
+auth_header = create_oauth_header(
+    endpoint_url=request_endpoint_url,
+    oauth_consumer_key=oauth_consumer_key,
+    oauth_consumer_secret=oauth_consumer_secret,
+    oauth_token=oauth_token,
+    oauth_token_secret=oauth_token_secret,
+    verbose=False)
+
+req_headers = {
+    # "Content-Type": "application/json",
+    "Authorization": auth_header,
+}
+
+request_token_params = {
+    "oauth_callback": callback_url,
+}
+response_req = requests.post(request_endpoint_url, headers=req_headers, json=request_token_params)
 response_req_text = response_req.text
 
 oauth_token_kvstr = response_req_text.split("&")
 token_dict = {x.split("=")[0]: x.split("=")[1] for x in oauth_token_kvstr}
-oauth_token = token_dict["oauth_token"]
+req_oauth_token = token_dict["oauth_token"]
 
 print("Please access the following URL and get the OAuth Verifier.")
-print(f"{authenticate_url}?oauth_token={oauth_token}")
+print(f"{authenticate_url}?oauth_token={req_oauth_token}")
 
 oauth_verifier = input("OAuth Verifierを入力してください> ")
 
 access_endpoint_url = "https://api.twitter.com/oauth/access_token"
 
-session_acc = OAuth1Session(API_KEY, API_KEY_SECRET, oauth_token, oauth_verifier)
-response_acc = session_acc.post(access_endpoint_url, params={"oauth_verifier": oauth_verifier})
-response_acc_text = response_acc.text
+auth_header = create_oauth_header(
+    endpoint_url=access_endpoint_url,
+    oauth_consumer_key=oauth_consumer_key,
+    oauth_consumer_secret=oauth_consumer_secret,
+    oauth_token=req_oauth_token,
+    oauth_token_secret=oauth_token_secret,
+    oauth_verifier=oauth_verifier,
+    verbose=True)
 
+acc_headers = {
+    # "Content-Type": "application/json",
+    "Authorization": auth_header,
+}
+
+print(acc_headers)
+
+verifier_params = {
+    "oauth_token": req_oauth_token,
+    "oauth_verifier": oauth_verifier,
+}
+response_acc = requests.post(access_endpoint_url, headers=acc_headers, json=verifier_params)
+response_acc_text = response_acc.text
 print(response_acc_text)
+
+# session_acc = OAuth1Session(API_KEY, API_KEY_SECRET, oauth_token, oauth_verifier)
+# response_acc = session_acc.post(access_endpoint_url, params={"oauth_verifier": oauth_verifier})
+# response_acc_text = response_acc.text
+
+# print(response_acc_text)
