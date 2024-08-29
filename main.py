@@ -33,7 +33,7 @@ def main(tweet_text, image_file_path):
     tweet_response = post_tweet_request(parameters)
 
     # レスポンスの確認
-    if tweet_response.status_code == 200:
+    if tweet_response.status_code == 201:
         print("Tweet posted successfully!")
     else:
         print(f"Failed to post tweet. Status code: {tweet_response.status_code}")
