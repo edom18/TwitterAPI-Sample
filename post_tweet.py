@@ -21,7 +21,7 @@ def request(parameters):
         oauth_consumer_secret=oauth_consumer_secret,
         oauth_token=oauth_token,
         oauth_token_secret=oauth_token_secret,
-        verbose=True)
+        verbose=False)
 
     # リクエストヘッダーのセット
     headers = {
