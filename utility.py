@@ -62,6 +62,10 @@ def create_oauth_header(
     signature = base64.b64encode(hmac.new(signing_key.encode(), base_string.encode(), hashlib.sha1).digest()).decode()
 
     if verbose:
+        print(f"Base String: {base_string}")
+        print("---------------------------------------------")
+        print(f"Signing Key: {signing_key}")
+        print("---------------------------------------------")
         print(f"Sorted Parameters: {sorted_parameters}")
         print("---------------------------------------------")
         print(f"Base String: {base_string}")
