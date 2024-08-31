@@ -27,7 +27,6 @@ def create_oauth_header(
         endpoint_url,
         oauth_consumer_key,
         oauth_consumer_secret,
-        oauth_token,
         oauth_token_secret,
         verbose=False,
         **additional_parameters):
@@ -40,7 +39,6 @@ def create_oauth_header(
 
     oauth_parameters = {
         "oauth_consumer_key": oauth_consumer_key,
-        "oauth_token": oauth_token,
         "oauth_signature_method": oauth_signature_method,
         "oauth_timestamp": oauth_timestamp,
         "oauth_nonce": oauth_nonce,
