@@ -12,7 +12,7 @@ dotenv.load_dotenv()
 oauth_consumer_key = os.environ.get("CONSUMER_KEY")
 oauth_consumer_secret = os.environ.get("CONSUMER_SECRET")
 
-callback_url = "https://hippogames.dev/api/oauth/redirect"
+callback_url = "http://localhost:11230/"
 request_endpoint_url = "https://api.twitter.com/oauth/request_token"
 
 auth_header = create_oauth_header(
@@ -20,6 +20,7 @@ auth_header = create_oauth_header(
     oauth_consumer_key=oauth_consumer_key,
     oauth_consumer_secret=oauth_consumer_secret,
     oauth_token_secret="",
+    oauth_callback=callback_url,
     verbose=False)
 
 req_headers = {
