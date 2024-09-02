@@ -10,7 +10,7 @@
 
 ## 設定ファイルの準備
 
-本リポジトリには `.env-sample` ファイルが含まれています。このサンプルを埋める形でご自身の Consumer Key などを設定してください。設定は `dotenv` を利用して読み込むようになっています。
+本リポジトリには `.env-sample` ファイルが含まれています。このサンプルを埋める形でご自身の Consumer Key などを設定してください。設定は `dotenv` を利用して読み込むようになっています。また、ファイルを `.env` にリネームしてください。
 
 ## アクセストークンとアクセストークンシークレットの取得
 
@@ -44,7 +44,7 @@ This is not aiming to use these APIs as library, just to know authorazing flow.
 
 ## Prepare the setting file
 
-This repo has `.env-sample` file to let you know how to setup `.env` file. Please fill them out of your information.
+This repo has `.env-sample` file to let you know how to setup `.env` file. Please fill them out of your information. After fill them out, rename it to `.env` .
 
 ## Get an access token and access token secret
 
