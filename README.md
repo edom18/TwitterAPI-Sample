@@ -28,6 +28,10 @@ $ python request-token.py
 $ python main <TEXT> <PATH_TO_IMAGE>
 ```
 
+本プロジェクトの解説記事を書いているので分からない点などはこちらを参考にしてください。
+
+- [X (Twitter) API + Oauth 1.0a で画像付き投稿をする](https://zenn.dev/edom18/articles/post-media-with-twitter-api)
+
 ----------------------------------
 
 # This is a sample project for tweeting with X (Twitter) API with OAuth 1.0a
